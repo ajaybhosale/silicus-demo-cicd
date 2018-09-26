@@ -29,8 +29,7 @@
             <exclude>
                 <directory suffix=".php">./tests</directory>
                 <directory suffix=".php">./app</directory>
-                <directory suffix=".php">./bootstrap</directory>
-                <directory suffix=".php">./build</directory>
+                <directory suffix=".php">./bootstrap</directory>                
                 <directory suffix=".php">./config</directory>
                 <directory suffix=".php">./database</directory>
                 <directory suffix=".php">./public</directory>
@@ -45,13 +44,13 @@
         </whitelist>
     </filter>
     <logging>
-        <log type="coverage-html" target="./build/html" lowUpperBound="35" highLowerBound="70"/>
-        <log type="coverage-clover" target="./build/logs/clover.xml"/>
-        <log type="coverage-php" target="./build/coverage.serialized"/>
+        <log type="coverage-html" target="../build/html" lowUpperBound="35" highLowerBound="70"/>
+        <log type="coverage-clover" target="../build/logs/clover.xml"/>
+        <log type="coverage-php" target="../build/coverage.serialized"/>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
-        <log type="log-junit" target="./build/logs/junit.xml" logIncompleteSkipped="false"/>
-        <log type="testdox-html" target="./build/testdox-html/testdox.html"/>
-        <log type="testdox-text" target="./build/testdox-html/testdox.txt"/>
+        <log type="log-junit" target="../build/logs/junit.xml" logIncompleteSkipped="false"/>
+        <log type="testdox-html" target="../build/testdox-html/testdox.html"/>
+        <log type="testdox-text" target="../build/testdox-html/testdox.txt"/>
     </logging>
     <php>
         <env name="APP_ENV" value="testing"/>

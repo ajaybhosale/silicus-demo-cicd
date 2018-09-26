@@ -76,8 +76,8 @@ vendor/bin/phpunit --log-junit build/logs/junit.xml'''
     }		
     stage('Selenium Test Cases...') {
       steps {	    
-		sh 'chmod -R 777 workspace/selenium/'
-        sh 'java -cp workspace/selenium/Restapi1/bin:workspace/selenium/Restapi1/lib/* org.testng.TestNG workspace/selenium/Restapi1/testng.xml'
+		sh 'chmod -R 777 selenium/'
+        sh 'java -cp selenium/Restapi1/bin:workspace/selenium/Restapi1/lib/* org.testng.TestNG selenium/Restapi1/testng.xml'
         step([$class: 'Publisher', reportFilenamePattern: '**/test-output/testng-results.xml'])		
       }
     }
