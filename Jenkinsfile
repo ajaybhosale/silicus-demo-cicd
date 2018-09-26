@@ -103,11 +103,15 @@ docker push silicus.azurecr.io/silicus-php-demo-dit:latest
 docker push silicus.azurecr.io/silicus-php-demo-dit:1'''
         archiveArtifacts(artifacts: 'workspace/**', excludes: 'selenium', allowEmptyArchive: true)
         mail(subject: 'SilicusDemo Approval for Staging', body: "Hi, Please take a action on new build  <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>", to: 'ajay.bhosale@silicus.com', replyTo: 'testmili@gmail.com', mimeType: 'text/html', from: 'testmili@gmail.com')
+        sh '''pwd
+ls -all'''
       }
     }
     stage('Deploy to Staging') {
       steps {
         input(message: 'Deploy to Staging?', id: 'deploy-to-staging', ok: 'Proceed', submitter: 'ajay', submitterParameter: 'yes')
+        sh '''pwd
+ls -all'''
         sh '''docker login --username silicus --password 5zNvbJC7tidlPx/erzMysNuPwx5IRREF silicus.azurecr.io
 docker build -t silicus-php-demo-sit .
 docker tag silicus-php-demo-dit silicus.azurecr.io/silicus-php-demo-sit:latest
