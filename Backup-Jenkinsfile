@@ -101,7 +101,6 @@ docker tag silicus-php-demo-dit silicus.azurecr.io/silicus-php-demo-dit:latest
 docker tag silicus-php-demo-dit silicus.azurecr.io/silicus-php-demo-dit:1
 docker push silicus.azurecr.io/silicus-php-demo-dit:latest
 docker push silicus.azurecr.io/silicus-php-demo-dit:1'''
-archiveArtifacts artifacts: 'workspace/**'
         mail(subject: 'SilicusDemo Approval for Staging', body: "Hi, Please take a action on new build  <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>", to: 'ajay.bhosale@silicus.com', replyTo: 'testmili@gmail.com', mimeType: 'text/html', from: 'testmili@gmail.com')
       }
     }
