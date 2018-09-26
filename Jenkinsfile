@@ -36,7 +36,7 @@ pipeline {
       }
     }
     stage('PHP Unit Test Cases...') {
-      steps {        
+      steps {
         sh '''cp dit-app.conf workspace/.env
 cd workspace
 chmod -R 777 storage/
@@ -53,13 +53,13 @@ vendor/bin/phpunit --log-junit build/logs/junit.xml'''
     stage('SonarQube Analysis') {
       environment {
         PROJECT_NAME = 'Silicus-PHP-Demo-CICD'
-        PROJECT_KEY = 'silicus-php-demo-cicd'        
+        PROJECT_KEY = 'silicus-php-demo-cicd'
         SONAR_HOST_URL = 'http://silicus.eastus.cloudapp.azure.com:9000'
         PROJECT_SOURCE_ENCODING = 'UTF-8'
         PROJECT_LANGUAGE = 'php'
       }
       steps {
-        sh 'chmod -R 777 workspace/build'             
+        sh 'chmod -R 777 workspace/build'
         sh '''PROJECT_VERSION=1.0.$(date +%y)$(date +%j).$BUILD_NUMBER
 /opt/sonar/bin/sonar-runner -Dsonar.projectName=$PROJECT_NAME \\
 -Dsonar.projectKey=$PROJECT_KEY \\
@@ -73,12 +73,12 @@ vendor/bin/phpunit --log-junit build/logs/junit.xml'''
 -Dorg.sonar.plugins.jmeter.jtlpath==$WORKSPACE/workspace/build/jmeter.jtl \\
 -Dsonar.exclusions="workspace/app/**, workspace/bootstrap/**, workspace/build/**, workspace/resources/**,workspace/config/**, workspace/database/**, workspace/modules/infrastructure/**,workspace/modules/user/**, workspace/public/**, workspace/routes/**, workspace/storage/**, workspace/tests/**, workspace/vendor/**"'''
       }
-    }		
+    }
     stage('Selenium Test Cases...') {
-      steps {	    
-		sh 'chmod -R 777 workspace/selenium/'
+      steps {
+        sh 'chmod -R 777 workspace/selenium/'
         sh 'java -cp workspace/selenium/Restapi1/bin:workspace/selenium/Restapi1/lib/* org.testng.TestNG workspace/selenium/Restapi1/testng.xml'
-        step([$class: 'Publisher', reportFilenamePattern: '**/test-output/testng-results.xml'])		
+        step([$class: 'Publisher', reportFilenamePattern: '**/test-output/testng-results.xml'])
       }
     }
     stage('Jmeter Test Cases...') {
@@ -101,11 +101,11 @@ docker tag silicus-php-demo-dit silicus.azurecr.io/silicus-php-demo-dit:latest
 docker tag silicus-php-demo-dit silicus.azurecr.io/silicus-php-demo-dit:1
 docker push silicus.azurecr.io/silicus-php-demo-dit:latest
 docker push silicus.azurecr.io/silicus-php-demo-dit:1'''
-archiveArtifacts artifacts: 'workspace/**', fingerprint: true
+        archiveArtifacts(artifacts: 'workspace/**', fingerprint: true, excludes: 'selenium', onlyIfSuccessful: true)
         mail(subject: 'SilicusDemo Approval for Staging', body: "Hi, Please take a action on new build  <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>", to: 'ajay.bhosale@silicus.com', replyTo: 'testmili@gmail.com', mimeType: 'text/html', from: 'testmili@gmail.com')
       }
     }
-	stage('Deploy to Staging') {
+    stage('Deploy to Staging') {
       steps {
         input(message: 'Deploy to Staging?', id: 'deploy-to-staging', ok: 'Proceed', submitter: 'ajay', submitterParameter: 'yes')
         sh '''docker login --username silicus --password 5zNvbJC7tidlPx/erzMysNuPwx5IRREF silicus.azurecr.io
@@ -114,7 +114,7 @@ docker tag silicus-php-demo-dit silicus.azurecr.io/silicus-php-demo-sit:latest
 docker tag silicus-php-demo-dit silicus.azurecr.io/silicus-php-demo-sit:1
 docker push silicus.azurecr.io/silicus-php-demo-sit:latest
 docker push silicus.azurecr.io/silicus-php-demo-sit:1'''
-       mail(subject: 'SilicusDemo Approval for UAT ', body: "Hi, Please take a action on new build  <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>", to: 'ajay.bhosale@silicus.com', replyTo: 'testmili@gmail.com', mimeType: 'text/html', from: 'testmili@gmail.com')
+        mail(subject: 'SilicusDemo Approval for UAT ', body: "Hi, Please take a action on new build  <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>", to: 'ajay.bhosale@silicus.com', replyTo: 'testmili@gmail.com', mimeType: 'text/html', from: 'testmili@gmail.com')
       }
     }
     stage('Deploy to UAT') {
@@ -127,7 +127,7 @@ docker tag silicus-php-demo-dit silicus.azurecr.io/silicus-php-demo-uat:1
 docker push silicus.azurecr.io/silicus-php-demo-uat:latest
 docker push silicus.azurecr.io/silicus-php-demo-uat:1'''
       }
-	}
+    }
     stage('Delete Workspace') {
       parallel {
         stage('Delete Workspace') {
@@ -137,13 +137,17 @@ docker push silicus.azurecr.io/silicus-php-demo-uat:1'''
         }
       }
     }
-  }  
+  }
   post {
     success {
       mail(to: 'ajay.bhosale@silicus.com', subject: "Success Pipeline: ${currentBuild.fullDisplayName}", body: "Congratulations pipeline build successfully ${env.BUILD_URL}")
+
     }
+
     failure {
       mail(to: 'ajay.bhosale@silicus.com', subject: "Failed Pipeline: ${currentBuild.fullDisplayName}", body: "Something is wrong with ${env.BUILD_URL}")
+
     }
+
   }
 }
