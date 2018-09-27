@@ -87,6 +87,12 @@ vendor/bin/phpunit --log-junit build/logs/junit.xml'''
         perfReport 'workspace/build/jmeter.jtl'
       }
     }
+	stage('Archive Artifacts') {
+      steps {
+         archiveArtifacts(artifacts: 'workspace/**', excludes: 'selenium', allowEmptyArchive: true)
+		 archiveArtifacts(artifacts: 'composer.json,composer.lock,dit-app.conf,Dockerfile', allowEmptyArchive: true)
+      }
+    }
     stage('Deploy to Development') {
       environment {
         AZURE_CR_USERNAME = 'silicus'
@@ -100,8 +106,7 @@ docker build -t silicus-php-demo-dit .
 docker tag silicus-php-demo-dit silicus.azurecr.io/silicus-php-demo-dit:latest
 docker tag silicus-php-demo-dit silicus.azurecr.io/silicus-php-demo-dit:1
 docker push silicus.azurecr.io/silicus-php-demo-dit:latest
-docker push silicus.azurecr.io/silicus-php-demo-dit:1'''
-        archiveArtifacts(artifacts: 'workspace/**', excludes: 'selenium', allowEmptyArchive: true)
+docker push silicus.azurecr.io/silicus-php-demo-dit:1'''        
         mail(subject: 'SilicusDemo Approval for Staging', body: "Hi, Please take a action on new build  <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>", to: 'ajay.bhosale@silicus.com', replyTo: 'testmili@gmail.com', mimeType: 'text/html', from: 'testmili@gmail.com')
       }
     }
