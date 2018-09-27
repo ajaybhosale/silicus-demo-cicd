@@ -68,10 +68,10 @@ vendor/bin/phpunit --log-junit build/logs/junit.xml'''
 -Dsonar.sources=$WORKSPACE \\
 -Dsonar.language=$PROJECT_LANGUAGE \\
 -Dsonar.projectVersion=$PROJECT_VERSION \\
--Dsonar.php.tests.reportPath=$WORKSPACE/workspace/build/logs/junit.xml \\
--Dsonar.php.coverage.reportPaths=$WORKSPACE/workspace/build/logs/clover.xml \\
--Dorg.sonar.plugins.jmeter.jtlpath==$WORKSPACE/workspace/build/jmeter.jtl \\
--Dsonar.exclusions="workspace/app/**, workspace/bootstrap/**, workspace/build/**, workspace/resources/**,workspace/config/**, workspace/database/**, workspace/modules/infrastructure/**,workspace/modules/user/**, workspace/public/**, workspace/routes/**, workspace/storage/**, workspace/tests/**, workspace/vendor/**"'''
+-Dsonar.php.tests.reportPath=$WORKSPACE/build/logs/junit.xml \\
+-Dsonar.php.coverage.reportPaths=$WORKSPACE/build/logs/clover.xml \\
+-Dorg.sonar.plugins.jmeter.jtlpath==$WORKSPACE/build/jmeter.jtl \\
+-Dsonar.exclusions="workspace/app/**, workspace/bootstrap/**, workspace/resources/**,workspace/config/**, workspace/database/**, workspace/modules/infrastructure/**,workspace/modules/user/**, workspace/public/**, workspace/routes/**, workspace/storage/**, workspace/tests/**, workspace/vendor/**"'''
       }
     }    
     stage('Archive Artifacts') {
