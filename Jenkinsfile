@@ -101,9 +101,9 @@ docker push silicus.azurecr.io/silicus-php-demo-dit:1'''
 ls -all'''
       }
     }
-    stage('Deploy to Staging') {
+    stage('Deploy to QA') {
       steps {
-        input(message: 'Deploy to Staging?', id: 'deploy-to-staging', ok: 'Proceed', submitter: 'ajay', submitterParameter: 'yes')
+        input(message: 'Deploy to QA?', id: 'deploy-to-qa', ok: 'Proceed', submitter: 'ajay', submitterParameter: 'yes')
         sh '''pwd
 ls -all'''
         sh '''cd /var/lib/jenkins/jobs/silicus-demo-cicd/branches/development/builds/${BUILD_NUMBER}/archive
@@ -130,7 +130,7 @@ docker push silicus.azurecr.io/silicus-php-demo-sit:1'''
         perfReport 'workspace/build/jmeter.jtl'
       }
     }
-    stage('Deploy to UAT') {
+    stage('Deploy to Staging/UAT') {
       steps {
         input(id: 'deploy-to-uat', message: 'Deploy to UAT', ok: 'Proceed', submitter: 'ajay', submitterParameter: 'yes')
         sh '''cd /var/lib/jenkins/jobs/silicus-demo-cicd/branches/development/builds/${BUILD_NUMBER}/archive
