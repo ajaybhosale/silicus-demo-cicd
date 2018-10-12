@@ -54,7 +54,8 @@ vendor/bin/phpunit --log-junit build/logs/junit.xml'''
       environment {
         PROJECT_NAME = 'Silicus-PHP-Demo-CICD'
         PROJECT_KEY = 'silicus-php-demo-cicd'
-        SONAR_HOST_URL = 'http://silicus.eastus.cloudapp.azure.com:9000'
+        SONAR_HOST_URL = 'https://codeanalysis.silicus.com/'
+		SONAR_LOGIN = 'ee0efa18054280e8a8f4399bba3797086991119d'
         PROJECT_SOURCE_ENCODING = 'UTF-8'
         PROJECT_LANGUAGE = 'php'
       }
@@ -63,6 +64,7 @@ vendor/bin/phpunit --log-junit build/logs/junit.xml'''
         sh '''PROJECT_VERSION=1.0.$(date +%y)$(date +%j).$BUILD_NUMBER
 /opt/sonar/bin/sonar-runner -Dsonar.projectName=$PROJECT_NAME \\
 -Dsonar.projectKey=$PROJECT_KEY \\
+-Dsonar.login=$SONAR_LOGIN \\
 -Dsonar.host.url=$SONAR_HOST_URL \\
 -Dsonar.sourceEncoding=$PROJECT_SOURCE_ENCODING \\
 -Dsonar.sources=$WORKSPACE \\
