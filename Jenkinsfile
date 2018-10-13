@@ -122,14 +122,12 @@ docker push silicus.azurecr.io/silicus-php-demo-sit:1'''
 	stage('Selenium Test Cases...') {
       steps {
         sh 'chmod -R 777 workspace/selenium/'
-        sh 'java -cp workspace/selenium/Restapi1/bin:workspace/selenium/Restapi1/lib/* org.testng.TestNG workspace/selenium/Restapi1/testng.xml'
-		step([$class: 'Publisher', reportFilenamePattern: '**/test-output/testng-results.xml'])
+        sh 'java -cp workspace/selenium/Restapi1/bin:workspace/selenium/Restapi1/lib/* org.testng.TestNG workspace/selenium/Restapi1/testng.xml'		
       }
     }
     stage('Jmeter Test Cases...') {
       steps {
-        sh '/opt/apache-jmeter-5.0/bin/jmeter -Jjmeter.save.saveservice.output_format=xml -n -t JavaDevOps.jmx -l workspace/build/jmeter.jtl'
-		perfReport 'workspace/build/jmeter.jtl'
+        sh '/opt/apache-jmeter-5.0/bin/jmeter -Jjmeter.save.saveservice.output_format=xml -n -t JavaDevOps.jmx -l workspace/build/jmeter.jtl'		
       }
     }
     stage('Deploy to Staging/UAT') {
