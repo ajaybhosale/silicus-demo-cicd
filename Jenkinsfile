@@ -55,7 +55,7 @@ vendor/bin/phpunit --log-junit build/logs/junit.xml'''
         PROJECT_NAME = 'Silicus-PHP-Demo-CICD'
         PROJECT_KEY = 'silicus-php-demo-cicd'
         SONAR_HOST_URL = 'https://codeanalysis.silicus.com/'
-		SONAR_LOGIN = 'ee0efa18054280e8a8f4399bba3797086991119d'
+        SONAR_LOGIN = 'ee0efa18054280e8a8f4399bba3797086991119d'
         PROJECT_SOURCE_ENCODING = 'UTF-8'
         PROJECT_LANGUAGE = 'php'
       }
@@ -75,7 +75,7 @@ vendor/bin/phpunit --log-junit build/logs/junit.xml'''
 -Dorg.sonar.plugins.jmeter.jtlpath==$WORKSPACE/build/jmeter.jtl \\
 -Dsonar.exclusions="workspace/app/**, workspace/bootstrap/**, workspace/resources/**,workspace/config/**, workspace/database/**, workspace/modules/infrastructure/**,workspace/modules/user/**, workspace/public/**, workspace/routes/**, workspace/storage/**, workspace/tests/**, workspace/vendor/**"'''
       }
-    }    
+    }
     stage('Archive Artifacts') {
       steps {
         archiveArtifacts(artifacts: 'workspace/**', excludes: 'selenium', allowEmptyArchive: true)
@@ -119,15 +119,16 @@ docker push silicus.azurecr.io/silicus-php-demo-sit:1'''
         mail(subject: 'SilicusDemo Approval for UAT ', body: "Hi, Please take a action on new build  <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>", to: 'ajay.bhosale@silicus.com', replyTo: 'testmili@gmail.com', mimeType: 'text/html', from: 'testmili@gmail.com')
       }
     }
-	stage('Selenium Test Cases...') {
+    stage('Selenium Test Cases...') {
       steps {
         sh 'chmod -R 777 workspace/selenium/'
-        sh 'java -cp workspace/selenium/Restapi1/bin:workspace/selenium/Restapi1/lib/* org.testng.TestNG workspace/selenium/Restapi1/testng.xml'		
+        sh 'java -cp workspace/selenium/Restapi1/bin:workspace/selenium/Restapi1/lib/* org.testng.TestNG workspace/selenium/Restapi1/testng.xml'
       }
     }
     stage('Jmeter Test Cases...') {
       steps {
-        sh '/opt/apache-jmeter-5.0/bin/jmeter -Jjmeter.save.saveservice.output_format=xml -n -t JavaDevOps.jmx -l workspace/build/jmeter.jtl'		
+        sh '/opt/apache-jmeter-5.0/bin/jmeter -Jjmeter.save.saveservice.output_format=xml -n -t JavaDevOps.jmx -l workspace/build/jmeter.jtl'
+        perfReport 'workspace/build/jmeter.jtl'
       }
     }
     stage('Deploy to Staging/UAT') {
